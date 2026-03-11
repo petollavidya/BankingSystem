@@ -1,0 +1,125 @@
+body{
+margin:0;
+font-family:Arial;
+background:#f4f6f9;
+}
+
+.container{
+display:flex;
+height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:220px;
+background:#1e2a38;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:30px;
+}
+
+.sidebar ul{
+list-style:none;
+padding:0;
+}
+
+.sidebar li{
+padding:10px 0;
+cursor:pointer;
+}
+
+/* Main */
+
+.main{
+flex:1;
+padding:20px;
+}
+
+/* Topbar */
+
+.topbar{
+display:flex;
+justify-content:flex-end;
+margin-bottom:20px;
+}
+
+.profile{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.profile img{
+border-radius:50%;
+}
+
+/* Cards */
+
+.cards{
+display:flex;
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+flex:1;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Transfer */
+
+.transfer{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:30px;
+}
+
+.transfer input{
+display:block;
+width:100%;
+padding:10px;
+margin:10px 0;
+}
+
+.transfer button{
+padding:10px 20px;
+background:#0066ff;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+/* Transactions */
+
+.transactions{
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th, td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:left;
+}
+
+.credit{
+color:green;
+}
+
+.debit{
+color:red;
+}

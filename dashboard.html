@@ -1,0 +1,872 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Success Banking</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+background:linear-gradient(to right,#d7ecff,#f3fbff);
+font-family:Arial;
+}
+
+.sidebar{
+min-height:100vh;
+background:#87CEFA;
+color:#003366;
+}
+
+.nav-link{
+color:#003366;
+margin:4px 0;
+cursor:pointer;
+}
+
+.nav-link:hover{
+background:#5bb8f5;
+color:white;
+border-radius:8px;
+}
+
+.section{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+.card{
+border:none;
+border-radius:14px;
+}
+
+.btn{
+border-radius:30px;
+}
+
+.withdraw-btn{
+background:#0b3d91;
+color:white;
+}
+
+.withdraw-btn:hover{
+background:#072e6d;
+}
+
+.tick{
+font-size:70px;
+color:green;
+}
+
+.atm-card{
+width:340px;
+height:200px;
+border-radius:18px;
+padding:20px;
+color:white;
+background:linear-gradient(135deg,#0f4c81,#1b82d1);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+position:relative;
+}
+
+.atm-bank{
+font-size:20px;
+font-weight:bold;
+}
+
+.atm-number{
+letter-spacing:3px;
+font-size:20px;
+margin-top:30px;
+}
+
+.atm-chip{
+width:45px;
+height:35px;
+background:gold;
+border-radius:6px;
+margin-top:15px;
+}
+
+.atm-name{
+position:absolute;
+bottom:20px;
+left:20px;
+font-size:16px;
+}
+
+.password-box{
+display:none;
+background:#d4edda;
+color:#155724;
+padding:10px;
+border-radius:6px;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+    <!-- TOP HEADER -->
+
+<div style="background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+
+<div>
+<h5>Welcome Vidya 👋</h5>
+</div>
+
+<div style="display:flex;align-items:center;gap:25px;">
+
+<div style="font-weight:bold;color:#0b3d91;">
+Session: <span id="timer">10:00</span>
+</div>
+
+<div onclick="toggleProfile()" style="cursor:pointer;">
+<i class="fa-solid fa-user-circle fa-2x"></i>
+</div>
+
+</div>
+
+</div>
+
+<!-- PROFILE DETAILS BOX -->
+
+<div id="profileBox" style="display:none;position:absolute;right:30px;top:60px;background:white;padding:15px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);width:220px;">
+
+<h6><b>Profile Details</b></h6>
+
+<p>
+Name: Vidya <br>
+Mobile: 9876543210 <br>
+Address: Tamil Nadu
+</p>
+
+</div>
+
+<div class="container-fluid">
+<div class="row">
+
+<nav class="col-md-2 sidebar p-3">
+
+<h3 class="text-center mb-4">🏦 Success Banking</h3>
+
+<ul class="nav flex-column">
+
+<li><a class="nav-link" onclick="showSection('home')"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+<li><a class="nav-link" onclick="showSection('deposit')"><i class="fa-solid fa-money-bill"></i> Deposit</a></li>
+<li><a class="nav-link" onclick="showSection('withdraw')"><i class="fa-solid fa-credit-card"></i> Withdraw</a></li>
+<li><a class="nav-link" onclick="showSection('transfer')"><i class="fa-solid fa-paper-plane"></i> Transfer</a></li>
+<li><a class="nav-link" onclick="showSection('investment')"><i class="fa-solid fa-chart-line"></i> Investments</a></li>
+<li><a class="nav-link" onclick="showSection('atm')"><i class="fa-solid fa-id-card"></i> ATM Card</a></li>
+<li><a class="nav-link" onclick="showSection('privacy')"><i class="fa-solid fa-lock"></i> Privacy</a></li>
+<li><a class="nav-link" onclick="showSection('transactions')"><i class="fa-solid fa-receipt"></i> Transactions</a></li>
+
+</ul>
+
+</nav>
+
+<main class="col-md-10 p-4">
+
+<div id="home" class="section active">
+  <h4 class="mb-4">Dashboard</h4>
+
+  <div class="row g-4">
+    <!-- Account Balance Card -->
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 h-100">
+        <h6 class="text-muted">Account Balance</h6>
+        <h2 class="text-primary mt-2">₹ <span id="balance"></span></h2>
+        <div id="lowBalanceWarning" class="alert alert-warning mt-3" style="display:none;">
+          <i class="fa-solid fa-triangle-exclamation"></i> Low Balance! Maintain above ₹5000
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Details Card -->
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 h-100">
+        <h6 class="text-muted">Customer Details</h6>
+        <p class="mt-2 mb-0">
+          <strong>Name:</strong> Vidya <br>
+          <strong>Account:</strong> 1234567890 <br>
+          <strong>Branch:</strong> Thanjavur <br>
+          <strong>Mobile:</strong> 9876543210
+        </p>
+      </div>
+    </div>
+
+    <!-- Credit Score Card -->
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 h-100 text-center">
+        <h6 class="text-muted">Credit Score</h6>
+        <h2 class="text-success mt-2" id="creditScore">750</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="deposit" class="section">
+<div class="card p-4 shadow-sm">
+<h4>Deposit Money</h4>
+
+<input id="depositAmount" class="form-control w-25 my-2" placeholder="Enter amount">
+
+<input type="password" id="depositPin" class="form-control w-25 my-2" placeholder="Enter ATM PIN">
+
+<button class="btn btn-success" onclick="deposit()">Deposit</button>
+
+</div>
+</div>
+
+<div id="withdraw" class="section">
+<div class="card p-4 shadow-sm">
+
+<h4>Withdraw Money</h4>
+
+<input id="withdrawAmount" class="form-control w-25 my-2" placeholder="Enter amount">
+
+<input type="password" id="withdrawPin" class="form-control w-25 my-2" placeholder="Enter ATM PIN">
+
+<button class="btn withdraw-btn" onclick="withdraw()">Withdraw</button>
+
+</div>
+</div>
+
+<div id="transfer" class="section">
+<div class="card p-4 shadow-sm">
+
+<h4>Transfer Money</h4>
+
+<input id="receiver" class="form-control w-50 my-2" placeholder="Receiver Account">
+
+<input id="transferAmount" class="form-control w-50 my-2" placeholder="Amount">
+
+<input type="password" id="transferPin" class="form-control w-50 my-2" placeholder="Enter ATM PIN">
+
+<button class="btn btn-success" onclick="transfer()">Send Money</button>
+
+</div>
+</div>
+
+<div id="investment" class="section">
+
+<div class="card p-4 shadow-sm">
+
+<h4 class="mb-4">Investment Options</h4>
+
+<div class="row g-4">
+
+<div class="col-md-3">
+<div class="card text-center p-3 shadow-sm" onclick="showSection('mutualfunds')">
+<i class="fa-solid fa-chart-pie text-primary fa-2x"></i>
+<h5 class="mt-3">Mutual Funds</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card text-center p-3 shadow-sm" onclick="showSection('gold')">
+<i class="fa-solid fa-coins text-warning fa-2x"></i>
+<h5 class="mt-3">Gold</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card text-center p-3 shadow-sm" onclick="showSection('silver')">
+<i class="fa-solid fa-medal text-secondary fa-2x"></i>
+<h5 class="mt-3">Silver</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card text-center p-3 shadow-sm" onclick="showSection('stocks')">
+<i class="fa-solid fa-arrow-trend-up text-success fa-2x"></i>
+<h5 class="mt-3">Stock Market</h5>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+<div id="mutualfunds" class="section">
+<h4 class="mb-4">Mutual Funds</h4>
+
+<div class="row g-4">
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>SBI Bluechip Fund</h5>
+<button class="btn btn-primary" onclick="buyInvestment('SBI Bluechip Fund')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>HDFC Top 100</h5>
+<button class="btn btn-primary" onclick="buyInvestment('HDFC Top 100')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Bajaj Finserv</h5>
+<button class="btn btn-primary" onclick="buyInvestment('Bajaj Finserv')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>ICICI Gold ETF Fund</h5>
+<button class="btn btn-primary" onclick="buyInvestment('ICICI Gold ETF Fund')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Nippon India</h5>
+<button class="btn btn-primary" onclick="buyInvestment('Nippon India')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Mirae Asset</h5>
+<button class="btn btn-primary" onclick="buyInvestment('Mirae Asset')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Axis ELSS</h5>
+<button class="btn btn-primary" onclick="buyInvestment('Axis ELSS')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>DSP ELSS</h5>
+<button class="btn btn-primary" onclick="buyInvestment('DSP ELSS')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Aditya Birla Sun Life</h5>
+<button class="btn btn-primary" onclick="buyInvestment('Aditya Birla Sun Life')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Kotak Multi Asset</h5>
+<button class="btn btn-primary" onclick="buyInvestment('Kotak Multi Asset')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Quantum Life</h5>
+<button class="btn btn-primary" onclick="buyInvestment('Quantum Life')">Buy</button>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>SBI liquid Fund</h5>
+<button class="btn btn-primary" onclick="buyInvestment('SBI liquid Fund')">Buy</button>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+
+<div id="gold" class="section">
+<h4>Buy Gold</h4>
+
+<img src="gold.jpg" width="300" height="200">
+<br/>
+<button class="btn btn-warning" onclick="buyInvestment('Gold Coin')">Buy Gold</button>
+
+</div>
+
+<div id="silver" class="section">
+<h4>Silver</h4>
+
+<img src="silver.jpg" width="200">
+<br/>
+<button class="btn btn-secondary" onclick="buyInvestment('Silver Coin')" >Buy Silver</button>
+
+</div>
+
+<div id="stocks" class="section">
+
+<h4>Stock Market</h4>
+
+<table class="table">
+<thead>
+<tr>
+<th>Company</th>
+<th>Price</th>
+<th>Buying Stocks</th>
+<th>Selling Stocks</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>Reliance</td>
+<td>₹2950</td>
+<td><button class="btn btn-success" onclick="buyInvestment('Reliance')">Buy</button></td>
+<td><button class="btn btn-success" onclick="sellInvestment('Reliance')">Sell</button></td>
+</tr>
+
+<tr>
+<td>Vedanta</td>
+<td>₹320</td>
+<td><button class="btn btn-success" onclick="buyInvestment('Vedanta')">Buy</button></td>
+<td><button class="btn btn-success" onclick="sellInvestment('Vedanta')">Sell</button></td>
+</tr>
+
+<tr>
+<td>Nifty 50 ETF</td>
+<td>₹210</td>
+<td><button class="btn btn-success" onclick="buyInvestment('Nifty 50')">Buy</button></td>
+<td><button class="btn btn-success" onclick="sellInvestment('Nifty 50')">Sell</button></td>
+</tr>
+<tr>
+<td>Nestle</td>
+<td>₹1300</td>
+<td><button class="btn btn-success" onclick="buyInvestment('Nestle')">Buy</button></td>
+<td><button class="btn btn-success" onclick="sellInvestment('Nestle')">Sell</button></td>
+</tr>
+<tr>
+<td>MRF</td>
+<td>₹60000</td>
+<td><button class="btn btn-success" onclick="buyInvestment('MRF')">Buy</button></td>
+<td><button class="btn btn-success" onclick="sellInvestment('MRF')">Sell</button></td>
+</tr>
+<tr>
+<td>Apollo</td>
+<td>₹4500</td>
+<td><button class="btn btn-success" onclick="buyInvestment('Apollo')">Buy</button></td>
+<td><button class="btn btn-success" onclick="sellInvestment('Apollo')">Sell</button></td>
+</tr>
+<tr>
+<td>Physics Wallah</td>
+<td>₹2100</td>
+<td><button class="btn btn-success" onclick="buyInvestment('Physics Wallah')">Buy</button></td>
+<td><button class="btn btn-success" onclick="sellInvestment('Physics Wallah')">Sell</button></td>
+</tr>
+
+
+</tbody>
+
+</table>
+
+<canvas id="stockChart" height="120"></canvas>
+
+</div>
+
+<div id="atm" class="section">
+
+<h4 class="mb-4">ATM Card Details</h4>
+
+
+
+
+<div class="atm-card">
+
+<div class="atm-bank">SUCCESS BANKING</div>
+<div class="atm-chip"></div>
+<div class="atm-number">1234 5678 9012 3456</div>
+<div class="atm-name">CARD HOLDER</div>
+
+</div>
+
+
+<!-- ATM PIN MANAGEMENT SECTION -->
+
+<div class="card p-4 shadow-sm mt-4" style="max-width:450px;">
+
+<h5 class="mb-3">ATM PIN Management</h5>
+
+<h6>Set PIN</h6>
+
+<input type="password" id="setPin" class="form-control my-2" placeholder="Enter 4 digit PIN">
+
+<button class="btn btn-primary mb-3" onclick="setPin()">Set PIN</button>
+
+<hr>
+
+<h6>Reset PIN</h6>
+<br/>
+<h6>Sends OTP to the registered mobile number</h6>
+
+<button class="btn btn-warning mb-2" onclick="sendOTP()">Send OTP</button>
+
+<input id="otpInput" class="form-control my-2" placeholder="Enter OTP">
+
+<input type="password" id="newPin" class="form-control my-2" placeholder="Enter New PIN">
+
+<button class="btn btn-success" onclick="verifyOTP()">Reset PIN</button>
+
+</div>
+</div>
+
+
+
+<div id="privacy" class="section">
+
+<div class="card p-4 shadow-sm">
+
+<h4>Change Password</h4>
+
+<input type="password" id="newPass" class="form-control my-2" placeholder="New Password">
+<input type="password" id="confirmPass" class="form-control my-2" placeholder="Confirm Password">
+
+<button class="btn btn-primary" onclick="changePassword()">Change Password</button>
+
+<div class="password-box" id="passMessage">
+Your password has been changed
+</div>
+
+</div>
+
+</div>
+
+<div id="transactions" class="section">
+
+<div class="card p-4 shadow-sm">
+
+<h4>Transaction History</h4>
+
+<table class="table">
+
+<thead>
+<tr>
+<th>Type</th>
+<th>Account</th>
+<th>Amount</th>
+<th>Date</th>
+</tr>
+</thead>
+
+<tbody id="history"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+</div>
+
+<div class="modal fade" id="successModal">
+
+<div class="modal-dialog modal-dialog-centered">
+
+<div class="modal-content text-center p-4">
+
+<div class="tick">✔</div>
+
+<h4 class="text-success">Transaction Successful</h4>
+
+<p id="successMessage"></p>
+
+<button class="btn btn-success" data-bs-dismiss="modal">Close</button>
+
+</div>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+let balance = parseInt(localStorage.getItem("balance")) || 10000;
+let history = JSON.parse(localStorage.getItem("history")) || [];
+
+// Initialize
+updateBalance();
+renderHistory();
+
+// -------------------- SECTION TOGGLE --------------------
+function showSection(id) {
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+// -------------------- PROFILE TOGGLE --------------------
+function toggleProfile() {
+    let box = document.getElementById("profileBox");
+    box.style.display = (box.style.display === "block") ? "none" : "block";
+}
+
+// Close profile if clicked outside
+document.addEventListener("click", (e) => {
+    let box = document.getElementById("profileBox");
+    if (!box.contains(e.target) && !e.target.closest('.fa-user-circle')) {
+        box.style.display = "none";
+    }
+});
+
+// -------------------- ATM PIN --------------------
+function setPin() {
+    let pin = document.getElementById("setPin").value;
+    if (pin.length !== 4 || isNaN(pin)) {
+        alert("PIN must be 4 digits");
+        return;
+    }
+    localStorage.setItem("atmPin", pin);
+    alert("ATM PIN set successfully");
+    document.getElementById("setPin").value = "";
+}
+
+function verifyPin(inputId) {
+    let storedPin = localStorage.getItem("atmPin");
+    if (!storedPin) {
+        alert("Please set ATM PIN first");
+        return false;
+    }
+    let enteredPin = document.getElementById(inputId).value;
+    if (enteredPin !== storedPin) {
+        alert("Incorrect ATM PIN");
+        return false;
+    }
+    return true;
+}
+
+// -------------------- BALANCE --------------------
+function updateBalance() {
+    document.getElementById("balance").innerText = balance;
+    // Low balance warning
+    const warning = document.getElementById("lowBalanceWarning");
+    if (balance < 5000) warning.style.display = "block";
+    else warning.style.display = "none";
+}
+
+// -------------------- SUCCESS MODAL --------------------
+function showSuccess(msg) {
+    document.getElementById("successMessage").innerText = msg;
+    new bootstrap.Modal(document.getElementById("successModal")).show();
+}
+
+// -------------------- DEPOSIT --------------------
+async function deposit() {
+    let amount = parseInt(document.getElementById("depositAmount").value);
+    if (!amount || amount <= 0) {
+        alert("Enter valid amount");
+        return;
+    }
+
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch("http://localhost:8080/deposit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ amount: amount })
+        });
+        const data = await response.json();
+        if (data.success) {
+            balance = data.balance;
+            history.push({ type: "Deposit", account: "Self", amount: amount, date: new Date().toLocaleString() });
+            save();
+            showSuccess(`₹${amount} deposited successfully`);
+            document.getElementById("depositAmount").value = "";
+            document.getElementById("depositPin").value = "";
+        } else {
+            alert(data.message || "Deposit failed");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Network error. Please try again later.");
+    }
+}
+
+// -------------------- WITHDRAW --------------------
+function withdraw() {
+    if (!verifyPin("withdrawPin")) return;
+
+    let amount = parseInt(document.getElementById("withdrawAmount").value);
+    if (!amount || amount <= 0) {
+        alert("Enter valid amount");
+        return;
+    }
+    if (amount > balance) {
+        alert("Insufficient balance");
+        return;
+    }
+
+    balance -= amount;
+    history.push({ type: "Withdraw", account: "Self", amount: amount, date: new Date().toLocaleString() });
+    save();
+    showSuccess(`₹${amount} withdrawn successfully`);
+
+    document.getElementById("withdrawAmount").value = "";
+    document.getElementById("withdrawPin").value = "";
+}
+
+// -------------------- TRANSFER --------------------
+function transfer() {
+    if (!verifyPin("transferPin")) return;
+
+    let receiver = document.getElementById("receiver").value.trim();
+    let amount = parseInt(document.getElementById("transferAmount").value);
+
+    if (!receiver) { alert("Enter receiver account"); return; }
+    if (!amount || amount <= 0) { alert("Enter valid amount"); return; }
+    if (amount > balance) { alert("Insufficient balance"); return; }
+
+    balance -= amount;
+    history.push({ type: "Transfer", account: receiver, amount: amount, date: new Date().toLocaleString() });
+    save();
+    showSuccess(`₹${amount} transferred to ${receiver}`);
+
+    document.getElementById("receiver").value = "";
+    document.getElementById("transferAmount").value = "";
+    document.getElementById("transferPin").value = "";
+}
+
+// -------------------- INVESTMENTS --------------------
+function buyInvestment(name, price = 0) {
+    // Deduct from balance if price > 0
+    if (price > 0) {
+        if (price > balance) {
+            alert("Insufficient balance for purchase");
+            return;
+        }
+        balance -= price;
+    }
+
+    history.push({ type: "Investment", account: name, amount: price > 0 ? price : "Purchased", date: new Date().toLocaleString() });
+    save();
+    showSuccess(`${name} purchased successfully`);
+}
+
+// -------------------- SAVE & RENDER --------------------
+function save() {
+    localStorage.setItem("balance", balance);
+    localStorage.setItem("history", JSON.stringify(history));
+    updateBalance();
+    renderHistory();
+}
+
+function renderHistory() {
+    let table = document.getElementById("history");
+    table.innerHTML = "";
+    history.slice().reverse().forEach(t => {
+        let amount = typeof t.amount === "number" ? `₹${t.amount}` : t.amount;
+        table.innerHTML += `<tr>
+            <td>${t.type}</td>
+            <td>${t.account}</td>
+            <td>${amount}</td>
+            <td>${t.date}</td>
+        </tr>`;
+    });
+}
+
+// -------------------- PASSWORD CHANGE --------------------
+function changePassword() {
+    let p1 = document.getElementById("newPass").value;
+    let p2 = document.getElementById("confirmPass").value;
+
+    if (p1 !== p2) return alert("Passwords do not match");
+    if (!p1) return alert("Enter a valid password");
+
+    // You may want to send this to backend in real app
+    document.getElementById("passMessage").style.display = "block";
+
+    document.getElementById("newPass").value = "";
+    document.getElementById("confirmPass").value = "";
+}
+
+// -------------------- STOCK CHART --------------------
+const ctx = document.getElementById('stockChart');
+if (ctx) {
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+            datasets: [{
+                label: 'Market Growth',
+                data: [100, 120, 115, 140, 160],
+                borderWidth: 2
+            }]
+        }
+    });
+}
+
+// -------------------- SESSION TIMER --------------------
+let sessionTime = 600; // 10 minutes
+let sessionInterval = setInterval(() => {
+    sessionTime--;
+    let min = Math.floor(sessionTime / 60);
+    let sec = sessionTime % 60;
+    document.getElementById("timer").innerText = (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
+    if (sessionTime <= 0) {
+        clearInterval(sessionInterval);
+        alert("Session expired");
+        window.location.href = "login.html";
+    }
+}, 1000);
+
+// -------------------- DASHBOARD LOAD --------------------
+(async function loadDashboard() {
+    const token = localStorage.getItem("token");
+    if (!token) { alert("Please login first"); window.location.href = "login.html"; return; }
+
+    try {
+        const res = await fetch("http://localhost:8080/dashboard", {
+            headers: { "Authorization":token }
+        });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById("balance").innerText = data.balance;
+            document.getElementById("creditScore").innerText = data.creditScore;
+            document.getElementById("home").innerHTML += `
+                <div class="mt-4">
+                    <p><strong>Name:</strong> ${data.name} | <strong>Email:</strong> ${data.email} | <strong>Mobile:</strong> ${data.mobile}</p>
+                </div>`;
+            balance = data.balance; // sync balance
+            save();
+        } else {
+            alert("Session expired, please login again.");
+            window.location.href = "login.html";
+        }
+    } catch (err) {
+        console.error("Fetch error:", err);
+    }
+})();
+</script>
+
+</body>
+</html>
